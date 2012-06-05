@@ -58,7 +58,11 @@ public class FunctionFrame extends GUIFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				String function = userFunction.getText();
-				resultArea.setText(function);
+				if(validateFunction(function)){
+					resultArea.setText(function);
+				}
+				else
+					resultArea.setText("The function entered was not valid. Please try again");
 			}
 			
 		});
@@ -70,7 +74,11 @@ public class FunctionFrame extends GUIFrame {
 				// TODO Auto-generated method stub
 				if(arg0.getKeyCode()== KeyEvent.VK_ENTER){
 					String function = userFunction.getText();
-					resultArea.setText(function);
+					if(validateFunction(function)){
+						resultArea.setText(function);
+					}
+					else
+						resultArea.setText("The function entered was not valid. Please try again");
 				}
 			}
 
@@ -105,5 +113,44 @@ public class FunctionFrame extends GUIFrame {
 		
 		
 	}
+	
+	private boolean validateFunction(String userFunction) {
+		// TODO Auto-generated method stub
+		String[] expression;
+		expression = userFunction.split("\\s");
+		
+		if(isOperation(expression[expression.length - 1]))
+			return false;
+		
+		for(int i = 0; i < expression.length; i++){
+			if(!isVariable(expression[i]) && !isNumeral(expression[i])){
+				if(!isOperation(expression[i]))
+					return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean isOperation(String string) {
+		// TODO Auto-generated method stub
+		if(string.matches("[\\+\\-\\*\\/]"))
+			return true;
+		return false;
+	}
+
+	private boolean isNumeral(String string) {
+		// TODO Auto-generated method stub
+		if(string.matches("\\d+"))
+			return true;
+		return false;
+	}
+
+	private boolean isVariable(String string) {
+		// TODO Auto-generated method stub
+		if(string.matches("\\d*x(\\^{1}(\\d+))?"))
+			return true;
+		return false;
+	}
+
 
 }

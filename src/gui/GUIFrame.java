@@ -1,28 +1,21 @@
 package gui;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+
 
 /**
  * 
  * @author Palmer
  *
  */
+@SuppressWarnings("serial")
 public class GUIFrame extends JFrame{
 	private JMenuBar theMenuBar;
 	private JMenu fileMenu;
 	
-	private JButton submitFunction;
-	private JPanel inputPanel;
-	private JPanel displayPanel;
-	private JTextField userFunction;
-	private JLabel functionLabel;
-	private JTextArea resultArea;
-	private Container container;
 	
 	/**
 	 * Construct a new GUIFrame object
