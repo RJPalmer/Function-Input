@@ -3,6 +3,8 @@
  */
 package main;
 
+import gui.GUIFrame;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -19,8 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import Graphing.GraphingGrid;
 import gui.GUIFrame;
-
 /**
  * @author Palmer
  *
@@ -105,16 +107,22 @@ public class FunctionFrame extends GUIFrame {
 		inputPanel.add(userFunction);
 		inputPanel.add(submitFunction);
 		
+		/*
 		//create the display panel
 		displayPanel = new JPanel();
 		displayPanel.setBackground(Color.blue);
+		*/
+		
+		GraphingGrid grid = new GraphingGrid(this.getWidth(), 400);
+		/*
 		resultArea = new JTextArea(40, 50);
 		resultArea.setEditable(false);
 		displayPanel.add(resultArea);
+		*/
 		
 		//add the panels to the frame
 		container.add(inputPanel, BorderLayout.NORTH);
-		container.add(displayPanel, BorderLayout.CENTER);
+		container.add(grid, BorderLayout.CENTER);
 		
 		
 	}
