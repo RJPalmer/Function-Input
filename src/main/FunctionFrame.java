@@ -38,6 +38,9 @@ public class FunctionFrame extends GUIFrame {
 	private JTextArea resultArea;
 	private Container container;
 	
+	private double[][] results;
+	private int xMin, xMax;
+	
 	/**
 	 * Constructor - constructs a new FunctionFrame object
 	 */
@@ -59,7 +62,8 @@ public class FunctionFrame extends GUIFrame {
 				// TODO Auto-generated method stub
 				String function = userFunction.getText();
 				if(validateFunction(function)){
-					resultArea.setText(function);
+					results = computeAnswer(function, xMin, xMax);
+					printResults(results);
 				}
 				else
 					resultArea.setText("The function entered was not valid. Please try again");
@@ -75,7 +79,8 @@ public class FunctionFrame extends GUIFrame {
 				if(arg0.getKeyCode()== KeyEvent.VK_ENTER){
 					String function = userFunction.getText();
 					if(validateFunction(function)){
-						resultArea.setText(function);
+						results = computeAnswer(function, xMin, xMax);
+						printResults(results);
 					}
 					else
 						resultArea.setText("The function entered was not valid. Please try again");
@@ -151,6 +156,113 @@ public class FunctionFrame extends GUIFrame {
 			return true;
 		return false;
 	}
+	
+	private void printResults(double[][] results) {
+		// TODO Auto-generated method stub
+		String resultText = "";
+		
+		resultText = "\nX Values |      Y Values";
+		resultText = resultText.concat("\n");
+		resultText = resultText.concat("---------------------------");
+		for(int i = 0; i < 11; i++){
+			for(int j = 0; j < 2; j++){
+				if(j % 2 != 1)
+					resultText = resultText.concat("\n" + results[i][j] + "     ");
+				else
+					resultText = resultText.concat("| " + results[i][j]);
+			}
+		}
+		resultArea.setText(resultText);
+	}
+	
+	private double[][] computeAnswer(String userFunction, int minXValue, int maxXValue) {
+		// TODO Auto-generated method stub
+		double [][] answers = new double[11][2];
+		String equation = userFunction;
+		for(int i = 0; i < 11; i++){
+			answers[i][0] = i + minXValue;
+			answers[i][1] = evaulateFunction(equation, i);
+		}
+		return answers;
+	}
 
+private double evaulateFunction(String equation, double d) {
+		
+		String[] components;
+		String varibles;
+		String currentOperation = "";
+		int value = 0;
+		double result = 0;
+		
+		components = equation.split("\\s");
+		for(int i = 0; i < components.length; i++){
+			if(isVariable(components[i])){
+				if(currentOperation.isEmpty())
+					result += computeVariable(d, components[i]);
+				else{
+					double variValue = computeVariable(d, components[i]);
+					result = computeOperation(result, variValue, currentOperation);
+					currentOperation = "";
+				}
+			}
+			else if(isOperation(components[i])){
+				currentOperation = components[i];
+			}
+			else if(isNumeral(components[i])){
+				value = Integer.parseInt(components[i]);
+				if(currentOperation.isEmpty())
+					result += value;
+				else
+					result = computeOperation(result, value, currentOperation);
+			}
+		}
+		return result;
+	}
 
+private double computeVariable(double d, String string) {
+	// TODO Auto-generated method stub
+	double value = 0;
+	int quantifier = 1;
+	int exponent = 1;
+	String [] variables = string.split("[x\\^]");
+	if(variables.length == 0)
+		value = d;
+	else if(!variables[0].isEmpty()){
+		quantifier = Integer.parseInt(variables[0]);
+		value = quantifier * d;
+	}
+	
+	else if(variables.length == 1){
+		value = quantifier * d; 
+	}
+	else{
+		exponent = Integer.parseInt(variables[2]);
+		d = Math.pow(d, exponent);
+		
+		value = quantifier * d;
+	}
+	return value;
+}
+
+private double computeOperation(double result, double variValue, String currentOperation) {
+	// TODO Auto-generated method stub
+	double answer = 0;
+	char operation = currentOperation.charAt(0);
+	switch(operation){
+	case '+':
+		answer = result + variValue;
+		break;
+	case '-':
+		answer = result - variValue;
+		break;
+	case '*':
+		answer = result * variValue;
+		break;
+	case '/':
+		answer = result / variValue;
+		break;
+	
+	}
+	return answer;
+}
 }
